@@ -3,7 +3,7 @@ package goheavy.vehicles;
 import io.cucumber.java.en.*;
 import general.GeneralSteps;
 
-public class VehicleStepDefinition {
+    public class VehicleStepDefinition {
     private VehicleStep vehicleStep;
     @SuppressWarnings("unused")
     private GeneralSteps generalSteps;

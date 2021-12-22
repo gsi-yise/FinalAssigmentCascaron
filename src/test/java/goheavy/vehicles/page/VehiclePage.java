@@ -380,7 +380,7 @@ public class VehiclePage extends PageObject {
     public boolean hoverOverImageComponent() {
         waitForSpinningElementDissapear();
         try {
-            setImage(getWebElement(By.xpath(getVINImageUploadItemXpath())), null);
+            setImage(getWebElement(By.xpath(getVINImageUploadItemXpath())));
             Setup.getWait().thread(500);
             Setup.getActions().moveToElement(getWebElement(By.xpath("//div[contains(@class, 'kxeirt')]/descendant::img")))
                     .build().perform();
@@ -401,5 +401,6 @@ public class VehiclePage extends PageObject {
             Assert.fail("Expected Image Over element not found");
             return false;
         }
+
     }
 }

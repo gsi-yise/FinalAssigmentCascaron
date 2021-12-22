@@ -15,7 +15,7 @@ public class WaitingObject {
 
 	public WaitingObject(WebDriver driver) {
 		this.driver = driver;
-		this.waitForLoading(20);
+		this.waitForLoading(120);
 	}
 
 	/**

@@ -72,7 +72,7 @@ public class VehiculeFeaturesPage extends TabsPage {
                     "div[@class='ant-row ant-form-item']/descendant::button[@type='button']")));
 
         scrollToWebElement(null, getStepTwoFormScroll());
-        setImage(getWebElement(By.xpath(getVehiclePhotoImageXpath())), null);
+        setImage(getWebElement(By.xpath(getVehiclePhotoImageXpath())));
 
         clickOn(getWebElement(By.xpath("//button[@type='submit']/descendant::span[text()='Next']")));
         waitForSpinningElementDissapear();

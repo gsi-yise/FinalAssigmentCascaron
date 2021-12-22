@@ -1,27 +1,5 @@
-#Author: ahmed.davila@generalsoftwareinc.com
-#Keywords Summary : Vehicle UHs automated Testing Examples
-#Feature: Add vehicle.
-#Scenario:
-#------------------------------------------
-#1 The "Add Vehicle" button is not shown if the user who is accessing the "Vehicles & Insurance List" 
-#view is the GoHeavy Admin, and he comes from the "Fleet Owners List" view.
-#2. Two vehicles with the same Vehicle ID No. (VIN) cannot be registered in the system.
-#------------------------------------------
-#Given: Some precondition step
-#------------------------------------------
-#1. The GoHeavy Admin / Fleet Owner must be logged in the system.
-#2. The GoHeavy Admin / Fleet Owner is on the "Vehicles & Insurance List" view.
-#------------------------------------------
-#When: Some key actions
-#Then: To observe outcomes or validation
-#------------------------------------------
-#1. Clicks on the "Add Vehicle" button.
-#------------------------------------------
-#And,But:
-#Scenario Outline: List of steps for data-driven as an Examples and <placeholder>
-#Examples: Container for s table
-#Background: Given Any user is logged
-#Sample Feature Definition Template
+#Author: yisel.nino@generalsoftwareinc.com
+
 
 Feature: Add Vehicle 2.2
   As a: GoHeavy Admin / Fleet Owner

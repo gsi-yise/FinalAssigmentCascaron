@@ -1,88 +1,330 @@
 package goheavy.driver.pages;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.swing.text.Element;
-
+import general.InputType;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-
-import general.InputType;
 import general.PageObject;
 import general.Setup;
 
 @SuppressWarnings("unused")
 public class DriverPage extends PageObject {
-	private String menuDriversLink;
-	private String addDriverButton;
-	private String AddDriverTitle;
+	private final By menuDriversLinkLocator = By.xpath("//span[text()='Drivers']/ancestor::span[@class='ant-menu-title-content']");
+	private final By addDriverButtonLocator = By.xpath("//span[text()='Add Driver']/ancestor::button[@class='ant-btn ant-btn-primary']");
+	private final By addDriverTitleLocator = By.xpath("//span[text()='Add Driver']/ancestor::div[@class='ant-row ant-row-space-between ant-row-middle']");
+	private final HashMap<String, WebElement> formElements;
+	By driverPhotoLocator = By.xpath("//label[contains(text(),'shoulders')]/" +
+			"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']");
+	By driverLicenseFrontLocator = By.xpath("//label[contains(@title,'(Front)')]/"
+			+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']");
+	By driverLicenseBackLocator = By.xpath("//label[contains(@title,'(Back)')]/"
+			+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']");
+	By tShirtSizeLocator = By.id("tShirtSize");
+	By tShirtOptionsLocator = By.id("tShirtSize_list");
+	By searchFieldLocator = By.xpath("//input[@placeholder='Search...']");
+	By newDriverNameLocator = By.xpath("//td[@class='ant-table-cell'][2]");
+	String form;
 
 	public DriverPage() {
 		super();
 		this.urlpath = "/driver";
-		setMenuDriversLink("//span[text()='Drivers']/ancestor::span[@class='ant-menu-title-content']");
-		setAddDriverButton("//span[text()='Add Driver']/ancestor::button[@class='ant-btn ant-btn-primary']");
-		setAddDriverTitle("//span[text()='Add Driver']/ancestor::div[@class='ant-row ant-row-space-between ant-row-middle']");
-	}
-	
-	private String getAddDriverTitle() {
-		return AddDriverTitle;
+		formElements = new HashMap<>();
+		setForm("//form[@id='driver-form']");
 	}
 
-	private void setAddDriverTitle(String addDriverTitle) {
-		AddDriverTitle = addDriverTitle;
+	public String getForm() {
+		return form;
 	}
 
-	private String getAddDriverButton() {
-		return addDriverButton;
+	public void setForm(String form) {
+		this.form = form;
 	}
 
-	private void setAddDriverButton(String addDriverButton) {
-		this.addDriverButton = addDriverButton;
+	public By getMenuDriversLinkLocator() {
+		return menuDriversLinkLocator;
 	}
 
-	private String getMenuDriversLink() {
-		return menuDriversLink;
+	public By getAddDriverButtonLocator() {
+		return addDriverButtonLocator;
 	}
 
-	private void setMenuDriversLink(String menuDriversLink) {
-		this.menuDriversLink = menuDriversLink;
+	public By getAddDriverTitleLocator() {
+		return addDriverTitleLocator;
 	}
 
 	public boolean goToView() {
 		try {
 			waitForSpinningElementDissapear();
-			waitAddittionalTime();
-			clickOnElement(getWebElement(By.xpath(getMenuDriversLink())), true);
+			//waitAdditionalTime();
+			clickOnElement(menuDriversLinkLocator);
 			return true;
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			return false;
 		}
 	}
-	
-	public void waitAddittionalTime() {
-		Setup.getWait().thread(5000);
+
+	public void waitAdditionalTime() {
+		Setup.getWait().thread(1500);
 	}
-	
-	public void waitAddittionalShortTime() {
-		Setup.getWait().thread(1000);
+
+	public void waitAdditionalShortTime() {
+		Setup.getWait().thread(500);
 	}
-	
-	public void clickOnElement(WebElement element, boolean waitForSpinner) {
-		if (waitForSpinner)
+
+	public void clicksOnAddDriverButton()
+	{
+		try {
 			waitForSpinningElementDissapear();
-		Setup.getActions().moveToElement(element).build().perform();
-		Setup.getActions().click(element).build().perform();
-		if (waitForSpinner)
-			waitForSpinningElementDissapear();
+			waitAdditionalTime();
+			clickOnElement(addDriverButtonLocator);
+		} catch (Exception ignored) { }
 	}
 
+	public void getFormElements() {
+		formElements.put("driverPhoto",getWebElement(By.xpath("//label[contains(text(),'shoulders')]/" +
+				"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']")));
+		formElements.put("firstName", getElement("firstName"));
+		formElements.put("lastName", getElement("lastName"));
+		formElements.put("birthAt", getElement("birthAt"));
+		formElements.put("experienceYear", getElement("experienceYear"));
+		formElements.put("mobilePhone", getElement("mobilePhone"));
+		formElements.put("email", getElement("email"));
+		formElements.put("address", getElement("address"));
+		formElements.put("addressCity", getElement("addressCity"));
+		formElements.put("addressStateId", getElement("addressStateId"));
+		formElements.put("addressCountryId", getElement("addressCountryId"));
+		formElements.put("addressZipCode", getElement("addressZipCode"));
+		formElements.put("state", getElement("addressStateId"));
+		formElements.put("driverLicenseFront",getWebElement(By.xpath("//label[contains(@title,'(Front)')]/"
+				+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']")));
+		formElements.put("driverLicenseBack",getWebElement(By.xpath("//label[contains(@title,'(Back)')]/"
+				+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']")));
+		formElements.put("dlNumber", getElement("dlNumber"));
+		formElements.put("dlIssuedDate", getElement("dlIssuedDate"));
+		formElements.put("dlExpirationDate", getElement("dlExpirationDate"));
+		formElements.put("dlClassType", getElement("dlClassType"));
+	}
 
+	public boolean hoverOverImageComponent() {
+		waitForSpinningElementDissapear();
+		try {
+			setImage(getWebElement(By.xpath("//label[contains(text(),'shoulders')]/" +
+					"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']")));
+			Setup.getWait().thread(500);
+			Setup.getActions().moveToElement(getWebElement(By.xpath("//div[contains(@class, 'kxeirt')]/descendant::img")))
+					.build().perform();
+			Setup.getWait().thread(500);
 
+			Assert.assertTrue(hoverElement(By.xpath("//span[@role='img' and @class='anticon anticon-eye' and @cursor='pointer']")
+					, null));
+			clickOn(getWebElement(By.xpath("//span[@role='img' and @class='anticon anticon-eye' and @cursor='pointer']")));
+			clickOn(getWebElement(By.xpath("//span[@class='anticon anticon-close ant-modal-close-icon' and @role='img']")));
+			Assert.assertTrue(hoverElement(By.xpath("//span[@role='img' and @class='anticon anticon-check' and @cursor='pointer']")
+					, null));
+			clickOn(getWebElement(By.xpath("//span[@role='img' and @class='anticon anticon-check' and @cursor='pointer']")));
+			Assert.assertTrue(hoverElement(By.xpath("//span[@role='img' and @class='anticon anticon-close' and @cursor='pointer']")
+					, null));
+
+			return true;
+		} catch (Exception e) {
+			Assert.fail("Expected Image Over element not found");
+			return false;
+		}
+
+	}
+
+	public boolean insertValidData(boolean update) {
+		try {
+			waitForSpinningElementDissapear();
+			waitAdditionalTime();
+
+			String title = "Driver Photo (including shoulders)";
+			setImageImproved(title, null);
+			//acceptImage(title); <- Using in Fleet Owner Driver Creation Process
+
+			String formId = "driver-form";
+
+			String name = getFaker().name().firstName();
+			Setup.setKeyValueStore("driverName", name);
+
+			if (update) {
+				sendDataToInputByWebElement(getWebElement(By.id("firstName")), (String) Setup.getValueStore("driverName"));
+				sendDataToInputByWebElement(getWebElement(By.id("lastName")), getFaker().name().lastName());
+				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")),
+						String.valueOf(getFaker().number().numberBetween(3, 8)));
+
+				sendDataToInputByWebElement(getWebElement(By.id("email")), getFaker().internet().emailAddress());
+
+				//Setting GoHeavy Ready Status
+				Setup.getActions().moveToElement(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().click(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().moveToElement(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().click(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
+
+				sendDataToInputByWebElement(getWebElement(By.id("address")), getFaker().address().streetName());
+				sendDataToInputByWebElement(getWebElement(By.id("addressCity")), getFaker().address().cityName());
+
+				formScrollImproved(formId, Integer.parseInt(Setup.getTimeouts().get("pageLoad").toString()));
+
+				title = "Driver's License Photo (Front)";
+				setImageImproved(title, null);
+				title = "Driver's License Photo (Back)";
+				setImageImproved(title, null);
+
+				String xpath = "//*[@type='submit']";
+				Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
+			}
+
+			sendDataToInputImproved("First Name", (String) Setup.getValueStore("driverName"), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Last Name", getFaker().name().lastName(), null,  InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			int min_val = 22;
+			int max_val = 55;
+
+			ThreadLocalRandom tlr = ThreadLocalRandom.current();
+			int randomNum = tlr.nextInt(min_val, max_val + 1);
+
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			String date_compare = dtf.format(LocalDateTime.now().plusYears(randomNum * -1));
+
+			sendDataToInputImproved("Birth Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("Birth Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Experience", String.valueOf(getFaker().number().numberBetween(3, 8)), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Mobile", "53" + getFaker().number().digits(8), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			String email = getFaker().internet().emailAddress();
+			Setup.setKeyValueStore("driver_email", getFaker().internet().emailAddress());
+
+			sendDataToInputImproved("Email", (String) Setup.getValueStore("driver_email"), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			scrollToWebElement(getWebElement(By.id("tShirtSize")), "//div[contains(@class, 'ContentDiv')]");
+
+			//tShirtSize
+			//tShirtSize_list
+			interactAndRandomSelectFromDropDown("tShirtSize", "tShirtSize_list");
+
+			sendDataToInputImproved("Address", getFaker().address().streetName(), null,  InputType.textarea, true, formId, 210);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("ZIP Code", getFaker().address().zipCode(), null,  InputType.input, true, formId, 210);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("City", getFaker().address().cityName(), null,  InputType.input, true, formId, 210);
+			waitAdditionalShortTime();
+
+			scrollToWebElement(getWebElement(By.id("addressStateId")), "//div[contains(@class, 'ContentDiv')]");
+
+			//Setup.getWait().thread(60000);
+
+			//addressStateId
+			//addressStateId_list
+			interactAndRandomSelectFromDropDown("addressStateId", "addressStateId_list");
+
+			//Driver's License Photo (Front)
+			title = "Driver's License Photo (Front)";
+			setImageImproved(title, null);
+
+			//Driver's License Photo (Back)
+			title = "Driver's License Photo (Back)";
+			setImageImproved(title, null);
+
+			sendDataToInputImproved("Driver's License (DL) Number", "1" + getFaker().number().digits(6), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			min_val = 2;
+			max_val = 5;
+
+			randomNum = tlr.nextInt(min_val, max_val + 1);
+
+			dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum * -1)));
+
+			sendDataToInputImproved("DL Issued Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("DL Issued Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+
+			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum)));
+
+			sendDataToInputImproved("DL Expiration Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("DL Expiration Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+
+			//scrollToWebElement(null, "//div[contains(@class, 'ContentDiv')]");
+
+			//dlClassType
+			//dlClassType_list
+			interactAndRandomSelectFromDropDown("dlClassType", "dlClassType_list");
+
+			return true;
+		} catch(Exception e) {
+			Assert.fail(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean checkDriverCreation() {
+		try {
+			waitForSpinningElementDissapear();
+			String driverEmail = (String) Setup.getValueStore("driver_email");
+
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), driverEmail).build().perform();
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), Keys.RETURN).build().perform();
+
+			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + driverEmail +  "']")));
+
+			return true;
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean userClicksUpdate() {
+		try {
+			waitAdditionalShortTime();
+			waitForSpinningElementDissapear();
+			clickOnElement(By.xpath("//span[@role='img' and @class='anticon anticon-edit']"));
+			return true;
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean systemOpensEdit() {
+		return getWebElement(By.xpath("//span[text()='Edit Driver']")).isDisplayed();
+	}
 }
+
+
+

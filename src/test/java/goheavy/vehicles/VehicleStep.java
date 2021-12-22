@@ -24,7 +24,6 @@ public class VehicleStep extends Steps {
         vehicleInfo = new VehiculeInfoPage();
         vehicleFeture = new VehiculeFeaturesPage();
         drivingRequirements = new DrivingRequirementsPage();
-
     }
 
     public void checkPage() {

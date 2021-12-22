@@ -7,7 +7,7 @@ import goheavy.dashboard.DashboardStep;
 import goheavy.driver.DriverStep;
 import goheavy.fleetowners.FleetStep;
 
-public class LoginStepDefinition {
+	public class LoginStepDefinition {
 	private LoginStep loginStep;
 	private GeneralSteps generalSteps;
 
