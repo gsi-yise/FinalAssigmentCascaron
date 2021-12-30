@@ -1,2 +1,2 @@
-# FinalAssigmentCascaron
-Final Assignment Cascaron of the Testing Automation Course
+# FinalAssigment
+Final Assignment of the Testing Automation Course
