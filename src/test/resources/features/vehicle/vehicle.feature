@@ -21,3 +21,16 @@ Feature: Add Vehicle 2.2
     And System displays message "A new Vehicle was successfully created."
     And The System Creates a new Vehicle in "On-boarding" status.
     And The System registers the creation date.
+
+  Scenario: Add Vehicle 2.2 -- Edit Vehicle preloaded info with no valid data in some fields
+    When User clicks on "Add Vehicle" button.
+    And User hover overs a Vehicle document image component with an image loaded
+    And The user sets invalid data to fields
+    Then The system displays an error message for each input field
+
+
+  Scenario: Add Vehicle 2.2 -- Clicks on the "Previous" button until the last tab
+    When User clicks on "Add Vehicle" button.
+    And User hover overs a Vehicle document image component with an image loaded
+    And The user inserts valid data and goes to next page
+    And User clicks on "Previous" button.

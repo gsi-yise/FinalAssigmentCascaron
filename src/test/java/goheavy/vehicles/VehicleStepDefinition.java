@@ -100,4 +100,43 @@ import general.GeneralSteps;
             System.out.println(e.getMessage());
         }
     }
-}
+
+        //escenario 3
+
+        @When("The user sets invalid data to fields")
+        public void the_user_sets_invalid_data_to_fields() {
+            try {
+                vehicleStep.userIntroduceInvalidData();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        @Then("The system displays an error message for each input field")
+        public void the_system_displays_an_error_message_for_each_input_field() {
+            try {
+                vehicleStep.verifyErrorSMS();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        //escenario 8
+
+        @And("The user inserts valid data and goes to next page")
+        public void theUserInsertsValidDataAndGoesToNextPage() {
+            vehicleStep.userInsertsValidDataAndGoesToNextPage();
+        }
+
+        @And("User clicks on \"Previous\" button.")
+        public void user_clicks_on_previous_button(){
+            vehicleStep.userClicksOnThePreviousButton();
+        }
+
+        @Then("The system returns to the previous view without lost of data previously inserted")
+        public void theSystemReturnsToThePreviousViewWithoutLostOfDataPreviouslyInserted() {
+            vehicleStep.SystemReturnsToThePreviousViewWithoutLostOfDataPreviouslyInserted();
+        }
+
+
+    }

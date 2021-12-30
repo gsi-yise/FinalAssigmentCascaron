@@ -125,4 +125,75 @@ public class VehicleStep extends Steps {
     }
 
 
+    //escenario 3
+    public void userIntroduceInvalidData() {
+        try {
+            TabsPage tp = new VehiculeInfoPage();
+            tp.insertInvalidData();
+          /*  tp = new VehiculeFeaturesPage();
+            tp.insertInvalidData();
+            tp = new DrivingRequirementsPage();
+            tp.insertInvalidData();*/
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    public void verifyErrorSMS() {
+        try {
+            TabsPage tp = new VehiculeInfoPage();
+            tp.checkErrorSMS();
+          /*  tp = new VehiculeFeaturesPage();
+            tp.checkErrorSMS();
+            tp = new DrivingRequirementsPage();
+            tp.checkErrorSMS();*/
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    //escenario 8
+
+    public void userInsertsValidDataAndGoesToNextPage() {
+        try {
+            TabsPage tp = new VehiculeInfoPage();
+            tp.userInsertsValidDataAndGoesToNextPage();
+            //    tp = new VehiculeFeaturesPage();
+            //    tp.insertValidData();
+            //    tp = new DrivingRequirementsPage();
+            //    tp.insertValidData();
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    public void userClicksOnThePreviousButton() {
+        try {
+            TabsPage tp = new DrivingRequirementsPage();
+            tp.pressPreviousButton();
+
+            tp = new VehiculeFeaturesPage();
+            tp.checkPreviousPageAndDataSaved();
+
+            tp.pressPreviousButton();
+            //  tp = new VehiculeInfoPage();
+            //  tp.checkPreviousPageAndDataSaved();
+
+        }catch (Exception e){
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    public void SystemReturnsToThePreviousViewWithoutLostOfDataPreviouslyInserted(){
+        try {
+            // TabsPage tp = new VehiculeFeaturesPage();
+            // tp.checkPreviousPageAndDataSaved();
+            TabsPage tp = new VehiculeInfoPage();
+            tp.checkPreviousPageAndDataSaved();
+        }catch (Exception e){
+            Assert.fail(e.getMessage());
+        }
+    }
+
+
 }

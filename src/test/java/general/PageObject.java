@@ -39,7 +39,8 @@ public class PageObject {
         setChoiceItems(new HashMap<>());
     }
 
-    public HashMap<String, WebElement> getChoiceItems() {
+
+        public HashMap<String, WebElement> getChoiceItems() {
         return choiceItems;
     }
 

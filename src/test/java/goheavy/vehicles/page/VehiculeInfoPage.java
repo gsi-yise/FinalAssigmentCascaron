@@ -1,5 +1,6 @@
 package goheavy.vehicles.page;
 
+import goheavy.vehicles.invalidDataMessages;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -287,6 +288,8 @@ public class VehiculeInfoPage extends TabsPage {
         waitForSpinningElementDissapear();
         Setup.getWait().thread(1500);
 
+        //ONLY ADDED FOR SCENARIO 3
+        vehiculeFeaturesPage.insertInvalidData();
     }
 
     private void fillDimensions() {
@@ -337,6 +340,87 @@ public class VehiculeInfoPage extends TabsPage {
             Assert.fail("Expected Title Page element not found");
             return null;
         }
+    }
+
+    //escenario 3
+    public void insertInvalidData() {
+        po.setImage(getWebElement(By.xpath(getVINImageUploadItemXpath())));
+        sendDataToInput(getWebElement(By.id(getVINInputID())), getFaker().regexify("[a-z1-9._%+-]{10}"), null, getFormScroll());
+        //vehicle type NO INVALID DATA
+        sendDataToInput(getWebElement(By.id(getVehicleMakeID())), getFaker().regexify("[a-z1-9._%+-]{10}"), null, getFormScroll());
+        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakepath())), getFaker().regexify("[a-z1-9._%+-]{10}"), null, getFormScroll());
+        sendDataToInput(getWebElement(By.xpath("//input[@id='long']")),getFaker().regexify("[1-9]\\.[1-9]{3,5}"),null,getFormScroll());
+        sendDataToInput(getWebElement(By.xpath("//input[@id='width']")),getFaker().regexify("[1-9]\\.[1-9]{3,5}"),null,getFormScroll());
+        sendDataToInput(getWebElement(By.xpath("//input[@id='height']")),getFaker().regexify("[1-9]\\.[1-9]{3,5}"),null,getFormScroll());
+        sendDataToInput(getWebElement(By.id(getVehiclePayloadID())), getFaker().regexify("[1-9]\\.[1-9]{3,5}"), null, getFormScroll());
+
+        scrollToWebElement(null, getFormScroll());
+        //clickOn(getWebElement(By.xpath("//button[@type='submit']/descendant::span[text()='Next']")));
+    }
+
+    public void checkSMSAndClear(String fieldName, By fieldErrorSMS, invalidDataMessages ExpectedSMS, String fieldElement) {
+        Assert.assertEquals("The invalid error message in the " + fieldName +
+                " field is not the same as the expected one",getWebElement(fieldErrorSMS).getText(),getInvalidErrorSms(ExpectedSMS));
+        Setup.getActions().moveToElement(getWebElement(By.xpath(fieldElement)));
+        clear_element_text(getWebElement(By.xpath(fieldElement)));
+
+    }
+
+    public void checkErrorSMS() {
+        checkSMSAndClear("Vehicle ID No. (VIN)",VINInputErrorSMSLocator,invalidDataMessages.VIN,getVINInputXpath());
+        checkSMSAndClear("Vehicle Make",vehicleMakeErrorSMSLocator,invalidDataMessages.letters,getMakeXpath());
+        checkSMSAndClear("Interior Dimensions (Long)",LDimensionErrorSMSLocator,invalidDataMessages.numbers,getLongXpath());
+        checkSMSAndClear("Interior Dimensions (Width)",WDimensionErrorSMSLocator,invalidDataMessages.numbers,getWidthXpath());
+        checkSMSAndClear("Interior Dimensions (Heigth)",HDimensionErrorSMSLocator,invalidDataMessages.numbers,getHeigthXpath());
+        checkSMSAndClear("Payload",payloadErrorSMSLocator,invalidDataMessages.numbers,getPayloadXpath());
+
+        insertValidData();
+    }
+    //escenario 8
+    public void userInsertsValidDataAndGoesToNextPage() {
+        String vinValue = getFaker().number().digits(17);
+        sendDataToInput(getWebElement(By.id(getVINInputID())), vinValue, null, getFormScroll());
+        Setup.setKeyValueStore("vinID", vinValue);
+
+        String vehicleMake = getFaker().superhero().name();
+        Setup.setKeyValueStore("vehicleMake", vehicleMake);
+        sendDataToInput(getWebElement(By.id(getVehicleMakeID())), (String) Setup.getValueStore("vehicleMake"), null,
+                getFormScroll());
+
+        checkVehicleTypeComponentBehaviour();
+        int min_val = 1995;
+        int max_val = 2018;
+        ThreadLocalRandom tlr = ThreadLocalRandom.current();
+        int randomNum = tlr.nextInt(min_val, max_val + 1);
+
+        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakepath())), String.valueOf(randomNum), null, getFormScroll());
+        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakepath())), null, Keys.RETURN, getFormScroll());
+
+        fillDimensions();
+        min_val = 90;
+        max_val = 210;
+        randomNum = tlr.nextInt(min_val, max_val + 1);
+
+        sendDataToInput(getWebElement(By.id(getVehiclePayloadID())), String.valueOf(randomNum), null, getFormScroll());
+
+        scrollToWebElement(null, getFormScroll());
+
+        clickOn(getWebElement(By.xpath("//button[@type='submit']/descendant::span[text()='Next']")));
+        waitForSpinningElementDissapear();
+        Setup.getWait().thread(1500);
+
+        //insert data in the next tab page
+        vehiculeFeaturesPage.userInsertsValidDataAndGoesToNextPage();
+
+    }
+
+    public void pressPreviousButton(){
+
+    }
+
+    public void checkPreviousPageAndDataSaved() {
+        Assert.assertEquals("Values of Vehicle VIN field are not equals", getWebElement(By.id(getVINInputID())).getAttribute("value"), Setup.getValueStore("vinID"));
+        //    Assert.assertEquals("Values of Vehicle Make field are not equals", getWebElement(By.id(getVehicleMakeID())).getAttribute("value"), Setup.getValueStore("vehicleMake"));
     }
 
 }

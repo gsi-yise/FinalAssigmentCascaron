@@ -1,5 +1,6 @@
 package goheavy.vehicles.page;
 
+import goheavy.vehicles.invalidDataMessages;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -204,5 +205,115 @@ public class DrivingRequirementsPage extends TabsPage {
 
     public boolean systemOpensAddVehicleView() {
         return true;
+    }
+
+    //escenario 3
+    public void insertInvalidData() {
+        waitForSpinningElementDissapear();
+        setImage(getWebElement(By.xpath(getVehicleInsuranceImageXpath())));
+        clickOn(getWebElement(By.id("verificationDelivery")));
+        clickOn(getWebElement(By.id("verificationLicenseTime")));
+
+        sendDataToInput(getWebElement(insurancePolicyLocator),getFaker().regexify("[a-z1-9._%+-]{10}"),null,getStepThreeForm());
+        //Setup.getActions().sendKeys(getWebElement(insurancePolicyLocator),Keys.RETURN);
+
+        sendDataToInput(getWebElement(insuranceCertificateLocator),getFaker().regexify("[a-z1-9._%+-]{10}"),null,getStepThreeForm());
+        //Setup.getActions().sendKeys(getWebElement(insurancePolicyLocator),Keys.RETURN);
+
+        introduceDate();
+
+        sendDataToInput(getWebElement(insuranceRenewalLocator),getFaker().regexify("[a-z1-9._%+-]{10}"),null,getStepThreeForm());
+        //Setup.getActions().sendKeys(getWebElement(insurancePolicyLocator),Keys.RETURN);
+
+        //Setup.getWait().thread(500);
+        scrollToWebElement(getWebElement(vehicleLicensePlateLocator),getStepThreeForm());
+        setImage(getWebElement(By.xpath("//label[@title='License Plate Photo']/ancestor::div[contains(@class, "
+                + "'ant-form-item')]/descendant::input[@type='file']")));
+
+        sendDataToInput(getWebElement(vehicleLicensePlateLocator),getFaker().regexify("[a-z1-9._%+-]{10}"),null,getStepThreeForm());
+        //Setup.getActions().sendKeys(getWebElement(vehicleLicensePlateErrorSMSLocator),Keys.RETURN);
+
+        //scrollToWebElement(null, getStepThreeForm());
+
+        Setup.getWait().thread(500);
+        checkVehicleLicensePlateComponentBehaviour();
+
+        setImage(getWebElement(By.xpath("//label[@title='Vehicle Registration Sticker']/ancestor::div[contains(@class, "
+                + "'ant-form-item')]/descendant::input[@type='file']")));
+
+        //Clear and Introduce Valid Data
+        checkSMSAndClear("Insurance Policy No.",insurancePolicyErrorSMSLocator, invalidDataMessages.policy,insurancePolicyLocator);
+        sendDataToInput(getWebElement(By.id("insurancePolicyNo")),
+                getFaker().number().digits(12), null, getStepThreeForm());
+
+        checkSMSAndClear("Insurance Certificate Company",insuranceCertificateErrorSMSLocator, invalidDataMessages.numbersAndLetters,insuranceCertificateLocator);
+        sendDataToInput(getWebElement(By.id("insuranceCertificateCompany")),
+                getFaker().name().firstName(), null, getStepThreeForm());
+
+        scrollToWebElement(getWebElement(insuranceRenewalLocator),getStepThreeForm());
+        checkSMSAndClear("Insurance Renewal",insuranceRenewalErrorSMSLocator, invalidDataMessages.letters,insuranceRenewalLocator);
+        scrollToWebElement(getWebElement(insuranceRenewalLocator),getStepThreeForm());
+        sendDataToInput(getWebElement(insuranceRenewalLocator),
+                getFaker().name().firstName(), null, getStepThreeForm());
+
+        scrollToWebElement(getWebElement(vehicleLicensePlateLocator),getStepThreeForm());
+        checkSMSAndClear("Vehicle License Plate No.",vehicleLicensePlateErrorSMSLocator, invalidDataMessages.plate,vehicleLicensePlateLocator);
+        scrollToWebElement(getWebElement(vehicleLicensePlateLocator),getStepThreeForm());
+        Setup.getActions().moveToElement(getWebElement(vehicleLicensePlateLocator)).build().perform();
+        sendDataToInput(getWebElement(vehicleLicensePlateLocator),
+                getFaker().number().digits(6), null, getStepThreeForm());
+
+        clicks_button_done();
+    }
+
+    public void checkErrorSMS() {
+        //Inside insertInvalidData method
+    }
+
+
+    //escenario 8
+    public void userInsertsValidDataAndGoesToNextPage() {
+        setImage(getWebElement(By.xpath(getVehicleInsuranceImageXpath())));
+
+        //checkboxes in Insurance Verification
+        clickOn(getWebElement(By.id("verificationDelivery")));
+        clickOn(getWebElement(By.id("verificationLicenseTime")));
+
+        sendDataToInput(getWebElement(By.id("insurancePolicyNo")), getFaker().number().digits(12), null, getStepThreeForm());
+
+        sendDataToInput(getWebElement(By.id("insuranceCertificateCompany")), getFaker().name().firstName(), null, getStepThreeForm());
+
+        introduceDate();
+
+        sendDataToInput(getWebElement(By.id("insuranceRenewal")), getFaker().name().firstName(), null, getStepThreeForm());
+
+        Setup.getWait().thread(500);
+
+        scrollToWebElement(null, getStepThreeForm());
+
+        Setup.getWait().thread(500);
+
+        setImage(getWebElement(By.xpath("//label[@title='License Plate Photo']/ancestor::div[contains(@class, "
+                + "'ant-form-item')]/descendant::input[@type='file']")));
+
+        sendDataToInput(getWebElement(By.id("licensePlateNo")), getFaker().number().digits(6), null, getStepThreeForm());
+
+        managePlateState();
+
+        setImage(getWebElement(By.xpath("//label[@title='Vehicle Registration Sticker']/ancestor::div[contains(@class, "
+                + "'ant-form-item')]/descendant::input[@type='file']")));
+
+    }
+
+    public void pressPreviousButton(){
+        scrollToWebElement(null, getStepThreeForm());
+
+        Setup.getWait().thread(500);
+        clickOn(getWebElement(By.xpath("//span[text()='Previous']/ancestor::button")));
+        waitForSpinningElementDissapear();
+    }
+
+    public void checkPreviousPageAndDataSaved() {
+
     }
 }

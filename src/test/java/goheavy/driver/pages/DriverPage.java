@@ -156,9 +156,7 @@ public class DriverPage extends PageObject {
 			if (update) {
 				sendDataToInputByWebElement(getWebElement(By.id("firstName")), (String) Setup.getValueStore("driverName"));
 				sendDataToInputByWebElement(getWebElement(By.id("lastName")), getFaker().name().lastName());
-				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")),
-						String.valueOf(getFaker().number().numberBetween(3, 8)));
-
+				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")), String.valueOf(getFaker().number().numberBetween(3, 8)));
 				sendDataToInputByWebElement(getWebElement(By.id("email")), getFaker().internet().emailAddress());
 
 				//Setting GoHeavy Ready Status
